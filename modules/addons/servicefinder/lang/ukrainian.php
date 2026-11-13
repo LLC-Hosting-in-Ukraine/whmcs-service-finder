@@ -1,0 +1,31 @@
+<?php
+if (!defined('WHMCS')) die('This file cannot be accessed directly');
+
+$_ADDONLANG['search_placeholder'] = 'IP, домен, логін панелі, клієнт, телефон, сервер… (кілька слів = усі мають збігтись)';
+$_ADDONLANG['search_button'] = 'Шукати';
+$_ADDONLANG['any_status'] = 'Будь-який статус';
+$_ADDONLANG['any_group'] = 'Будь-яка група';
+$_ADDONLANG['any_server'] = 'Будь-який сервер';
+$_ADDONLANG['operators'] = 'Операції: <code>ip:203.0.113</code> <code>status:suspended</code> <code>server:vm6</code> <code>product:storage</code> <code>client:іван</code> <code>user:ftpuser1</code> <code>id:2090</code> <code>old:60</code> (строк оплати був 60+ днів тому). Фраза в лапках — як одне слово.';
+$_ADDONLANG['hint_empty'] = 'Введіть запит. Шукає в: домен, усі IP, логін панелі, hostname, нотатки, додаткові поля, доповнення, клієнт (ім\'я, e-mail, телефон), продукт, сервер.';
+$_ADDONLANG['elastic_down'] = 'Elastic недоступний (%s), використано SQL.';
+$_ADDONLANG['services'] = 'Послуги';
+$_ADDONLANG['shown_first'] = 'показано перші %d, уточніть запит';
+$_ADDONLANG['col_client'] = 'Клієнт';
+$_ADDONLANG['col_product'] = 'Продукт';
+$_ADDONLANG['col_target'] = 'Домен / IP / логін';
+$_ADDONLANG['col_server'] = 'Сервер';
+$_ADDONLANG['col_status'] = 'Статус';
+$_ADDONLANG['col_billing'] = 'Оплата';
+$_ADDONLANG['col_found_in'] = 'Знайдено в';
+$_ADDONLANG['days_short'] = 'д';
+$_ADDONLANG['nothing_found'] = 'Нічого не знайдено.';
+$_ADDONLANG['domains'] = 'Домени (реєстрації)';
+$_ADDONLANG['clients'] = 'Клієнти';
+$_ADDONLANG['f_domain'] = 'домен';
+$_ADDONLANG['f_ip'] = 'IP';
+$_ADDONLANG['f_login'] = 'логін';
+$_ADDONLANG['f_notes'] = 'нотатки';
+$_ADDONLANG['f_subscription'] = 'підписка';
+$_ADDONLANG['activated'] = 'Пошук послуг увімкнено (Addons → Service Finder)';
+$_ADDONLANG['deactivated'] = 'Пошук послуг вимкнено';
