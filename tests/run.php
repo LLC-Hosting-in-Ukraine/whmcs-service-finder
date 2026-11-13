@@ -184,16 +184,33 @@ ok(strpos($html, 'name="module" value="servicefinder"') !== false && strpos($htm
 ok(strpos($html, 'Type a query') !== false, 'empty query shows the hint');
 $html = $render(['q' => '203.0.113.108']);
 ok(strpos($html, '#1</a>') !== false && strpos($html, 'KVM-VPS-4G') !== false && strpos($html, 'Suspended') !== false, 'result row rendered');
-ok(preg_match('/\(\+\d+ d\)/', $html) === 1, 'overdue days shown for a suspended service');
-ok(strpos($html, 'IP') !== false, '"found in" shows which field matched');
+ok(preg_match('/sf-late (warn|bad)">\+\d+ d</', $html) === 1, 'overdue days shown for a suspended service (+70 d is red)');
+ok(strpos($html, 'sf-found">IP<') !== false, '"found in" shows which field matched');
+ok(strpos($html, 'data-copy="203.0.113.108"') !== false && strpos($html, '<mark>203.0.113.108</mark>') !== false, 'IP chip: copyable and the match is highlighted');
+ok(strpos($html, 'class="sf-st"') !== false && strpos($html, 'class="sf-stat"') !== false && strpos($html, 'sf-count">') !== false, 'status pill, per-status summary and total counter are rendered');
 $html = $render(['q' => '<script>alert(1)</script>']);
 ok(strpos($html, '<script>alert(1)</script>') === false && strpos($html, '&lt;script&gt;') !== false, 'user input is HTML-escaped');
 $html = $render(['q' => 'nonexistent-zzz']);
 ok(strpos($html, 'Nothing found.') !== false, 'no results message');
 $html = $render(['q' => 'smith']);
-ok(strpos($html, 'Clients: 1') !== false, 'clients block appears');
+ok(strpos($html, 'Clients<span class="sf-count">1</span>') !== false, 'clients block appears');
 $html = $render(['q' => 'acme']);
-ok(strpos($html, 'Domain registrations: 1') !== false, 'domains block');
+ok(strpos($html, 'Domain registrations<span class="sf-count">1</span>') !== false, 'domains block');
+
+// ---------------------------------------------------------------- View helpers + extra page checks
+echo "View\n";
+use ServiceFinder\View;
+ok(View::hl('Ivan <b>Petrenko</b> & co', ['petrenko']) === 'Ivan &lt;b&gt;<mark>Petrenko</mark>&lt;/b&gt; &amp; co', 'hl: escapes first, marks the match case-insensitively');
+ok(View::hl('a.b.c', ['.']) === 'a<mark>.</mark>b<mark>.</mark>c', 'hl: regex characters in the word are literal');
+ok(View::hl('Іван', ['іВ']) === '<mark>Ів</mark>ан', 'hl: Cyrillic, case-insensitive');
+ok(View::hl('x', []) === 'x' && View::hl('', ['a']) === '', 'hl: no terms / empty text');
+ok(View::initials('Іван Петренко') === 'ІП' && View::initials('') === '?' && View::initials('—') === '?', 'initials');
+ok(View::url(['q' => 'a b', 'status' => '', 'group' => 0]) === 'addonmodules.php?module=servicefinder&q=a+b', 'url drops empty filters');
+$html = $render(['q' => 'ip:203.0.113', 'status' => 'Suspended']);
+ok(strpos($html, 'name="status" value="Suspended"') !== false, 'the active status filter survives a new search');
+ok(strpos($html, 'class="on"') !== false && strpos($html, 'status=Suspended') !== false, 'status chips: the active one is marked, links keep the query');
+$html = $render(['q' => '<img src=x onerror=1>']);
+ok(strpos($html, '<img src=x') === false, 'raw HTML from the query never reaches the page');
 
 echo "\n" . ($fail ? "FAILED: $fail failed, $pass passed\n" : "OK: $pass passed\n");
 exit($fail ? 1 : 0);
